@@ -1,8 +1,8 @@
-Project: PostgreSQL 16 + Atlas (DB migrations) + pgAdmin via Docker Compose
+Project: PostgreSQL 18 + Atlas (DB migrations) + pgAdmin via Docker Compose
 
 Overview
 This project provides a ready-to-run local development stack with:
-- PostgreSQL 16 as the database
+- PostgreSQL 18 as the database
 - Atlas as the database migration tool
 - pgAdmin 4 as the database management UI
 - Docker Compose to orchestrate all services and run migrations automatically on startup
@@ -11,8 +11,7 @@ Repository structure
 - docker-compose.yml — Orchestrates Postgres, Atlas (migrations), and pgAdmin
 - atlas.hcl — Atlas configuration (connection URL and migration directory)
 - migrations/ — Database migration files (Golang-Migrate format)
-    - 20251023145101_init.up.sql — Example migration that creates a users table
-    - 20251023145101_init.down.sql — Rollback for the example migration
+    - 00_core_init_tables.sql — Example migration that creates a users table
 - .env — Default environment variables (can be customized)
 - README.md — This documentation
 
@@ -26,7 +25,7 @@ Quick start
 2) Start the stack
 - Run: docker compose up --build
 - What will happen:
-    - Postgres 16 starts and becomes healthy.
+    - Postgres 18 starts and becomes healthy.
     - The migrate service runs "atlas migrate apply --env docker" one time and exits after applying migrations.
     - pgAdmin becomes available on http://localhost:5050 (default).
 
@@ -53,8 +52,7 @@ Managing migrations with Atlas
 Create a new migration file
 - You can author SQL directly inside migrations/*.up.sql and optional *.down.sql.
 - Example file names:
-    - migrations/20251101090000_add_products.up.sql
-    - migrations/20251101090000_add_products.down.sql
+    - migrations/00_core_init_tables.sql
 
 Apply migrations (re-run manually)
 - The migrate service runs automatically on docker compose up. If you add new migration files or see checksum errors, run:
@@ -99,7 +97,7 @@ Troubleshooting
 - Port already in use:
     - Change POSTGRES_PORT or PGADMIN_PORT in .env and re-run docker compose up.
 - Authentication failure in pgAdmin:
-    - Ensure your pgAdmin connection user/password match the values in .env for Postgres.
+    - Ensure your pgAdmin connection user/password matches the values in .env for Postgres.
 - Migrations didn’t run:
     - Check logs of the migrate service: docker compose logs migrate
     - Run manually: docker compose run --rm migrate

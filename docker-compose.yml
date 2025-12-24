@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: postgres:18
     container_name: pgsql_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -25,7 +25,7 @@ services:
     working_dir: /workspace
     volumes:
       - ./migrations:/workspace/migrations
-      - ./atlas.hcl:/workspace/atlas.hcl:ro
+      - ./atlas.hcl:/workspace/atlas.hcl
     environment:
       PGHOST: db
       PGUSER: ${POSTGRES_USER:-postgres}
