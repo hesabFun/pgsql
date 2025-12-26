@@ -1,26 +1,27 @@
-Project: PostgreSQL 18 + Atlas (DB migrations) + pgAdmin via Docker Compose
+# Project: PostgreSQL 18 + Atlas (DB migrations) + pgAdmin via Docker Compose
 
-Overview
+## Overview
 This project provides a ready-to-run local development stack with:
 - PostgreSQL 18 as the database
 - Atlas as the database migration tool
 - pgAdmin 4 as the database management UI
 - Docker Compose to orchestrate all services and run migrations automatically on startup
 
-Repository structure
+## Repository structure
 - docker-compose.yml — Orchestrates Postgres, Atlas (migrations), and pgAdmin
 - atlas.hcl — Atlas configuration (connection URL and migration directory)
 - migrations/ — Database migration files (Golang-Migrate format)
-    - 00_core_init_tables.sql — Example migration that creates a users table
+    - 00_core_init_tables.sql — Initial migration that creates the core ledger tables
+    - 01_create_tenant_function.sql — Function to create a new tenant
 - PGTap/ — Database test files (pgTAP)
     - 00_core_tables_test.sql — Tests for the core ledger schema
 - .env — Default environment variables (can be customized)
 - README.md — This documentation
 
-Prerequisites
+## Prerequisites
 - Docker Desktop (or Docker Engine + Docker Compose) installed and running
 
-Quick start
+## Quick start
 1) Configure environment variables (optional)
 - Edit .env to adjust credentials and ports if needed.
 
@@ -47,28 +48,28 @@ Quick start
         - Password: postgres (or your POSTGRES_PASSWORD)
 - Save and connect. You should see the ledger database and (after the first run) the core tables under Schemas -> public -> Tables.
 
-Managing migrations with Atlas
+## Managing migrations with Atlas
 - Migration format: golang-migrate style (file names like 20250101120000_add_table.up.sql)
 - Files live in: migrations/
 
-Create a new migration file
+## Create a new migration file
 - You can author SQL directly inside migrations/*.up.sql and optional *.down.sql.
 - Example file names:
     - migrations/00_core_init_tables.sql
 
-Apply migrations (re-run manually)
+## Apply migrations (re-run manually)
 - The migrate service runs automatically on docker compose up. If you add new migration files or see checksum errors, run:
     - docker compose run --rm migrate migrate hash --env docker
     - docker compose run --rm migrate migrate apply --env docker
 
-See migration status
+## See migration status
 - docker compose run --rm migrate atlas migrate status --env docker
 
-Roll back last migration (down)
+## Roll back last migration (down)
 - docker compose run --rm migrate atlas migrate down --env docker -- 1
     - The trailing "-- 1" tells Atlas to revert one migration. Adjust as needed.
 
-Running Tests with pgTAP
+## Running Tests with pgTAP
 - Tests are located in: PGTap/
 - To run all tests:
     - docker compose run --rm pgtap
@@ -77,17 +78,17 @@ Running Tests with pgTAP
     2. Install the pgtap extension (if not already present).
     3. Execute all .sql files in the PGTap/ directory using pg_prove.
 
-Stop the stack
+## Stop the stack
 - Press Ctrl+C in the terminal where docker compose up is running, then:
     - docker compose down
 
-Persisted data and volumes
+## Persisted data and volumes
 - Postgres data is persisted in the db_data Docker volume.
 - pgAdmin state is persisted in the pgadmin_data Docker volume.
 - To remove containers and volumes (CAUTION: destroys your DB data):
     - docker compose down -v
 
-Configuration reference
+## Configuration reference
 - .env variables (defaults shown):
     - PGUSER=postgres
     - PGPASSWORD=postgres
@@ -98,13 +99,13 @@ Configuration reference
     - PGADMIN_PORT=5050
     - ATLAS_LOG_FORMAT=cli
 
-Notes and tips
+## Notes and tips
 - If you change credentials or DB name in .env, pgAdmin connection settings must match.
 - The migrate service depends on the db healthcheck, ensuring migrations only run after Postgres is ready.
 - The Atlas configuration (atlas.hcl) is set to use the Docker network host name db to connect to Postgres.
 - For schema diff and declarative workflows, see Atlas docs: https://atlasgo.io/
 
-Troubleshooting
+## Troubleshooting
 - Port already in use:
     - Change POSTGRES_PORT or PGADMIN_PORT in .env and re-run docker compose up.
 - Authentication failure in pgAdmin:
@@ -117,5 +118,11 @@ Troubleshooting
 - Reset everything (DANGER: deletes data):
     - docker compose down -v && docker compose up --build
 
-License
+## TODO
+- [x] Create a function to create a tenant
+- [ ] Create a function to create a ledger
+- [ ] Create a function to create a ledger entry
+- [ ] Create a function to query ledger entries
+
+## License
 - This sample is provided as-is. Use freely for learning or as a starting point for your projects.
