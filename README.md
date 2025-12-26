@@ -12,6 +12,8 @@ Repository structure
 - atlas.hcl — Atlas configuration (connection URL and migration directory)
 - migrations/ — Database migration files (Golang-Migrate format)
     - 00_core_init_tables.sql — Example migration that creates a users table
+- PGTap/ — Database test files (pgTAP)
+    - 00_core_tables_test.sql — Tests for the core ledger schema
 - .env — Default environment variables (can be customized)
 - README.md — This documentation
 
@@ -40,10 +42,10 @@ Quick start
     - Connection
         - Host name/address: db
         - Port: 5432 (or your POSTGRES_PORT if changed)
-        - Maintenance database: app (or your POSTGRES_DB)
+        - Maintenance database: ledger (or your POSTGRES_DB)
         - Username: postgres (or your POSTGRES_USER)
         - Password: postgres (or your POSTGRES_PASSWORD)
-- Save and connect. You should see the app database and (after first run) a users table under Schemas -> public -> Tables.
+- Save and connect. You should see the ledger database and (after the first run) the core tables under Schemas -> public -> Tables.
 
 Managing migrations with Atlas
 - Migration format: golang-migrate style (file names like 20250101120000_add_table.up.sql)
@@ -66,6 +68,15 @@ Roll back last migration (down)
 - docker compose run --rm migrate atlas migrate down --env docker -- 1
     - The trailing "-- 1" tells Atlas to revert one migration. Adjust as needed.
 
+Running Tests with pgTAP
+- Tests are located in: PGTap/
+- To run all tests:
+    - docker compose run --rm pgtap
+- This will:
+    1. Ensure the database and migrations are ready.
+    2. Install the pgtap extension (if not already present).
+    3. Execute all .sql files in the PGTap/ directory using pg_prove.
+
 Stop the stack
 - Press Ctrl+C in the terminal where docker compose up is running, then:
     - docker compose down
@@ -80,7 +91,7 @@ Configuration reference
 - .env variables (defaults shown):
     - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=postgres
-    - POSTGRES_DB=app
+    - POSTGRES_DB=ledger
     - POSTGRES_PORT=5432
     - PGADMIN_DEFAULT_EMAIL=admin@example.com
     - PGADMIN_DEFAULT_PASSWORD=admin
