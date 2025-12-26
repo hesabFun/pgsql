@@ -89,10 +89,10 @@ Persisted data and volumes
 
 Configuration reference
 - .env variables (defaults shown):
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=postgres
-    - POSTGRES_DB=ledger
-    - POSTGRES_PORT=5432
+    - PGUSER=postgres
+    - PGPASSWORD=postgres
+    - PGDATABASE=ledger
+    - PGPORT=5432
     - PGADMIN_DEFAULT_EMAIL=admin@example.com
     - PGADMIN_DEFAULT_PASSWORD=admin
     - PGADMIN_PORT=5050
