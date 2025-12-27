@@ -121,12 +121,5 @@ This project provides a ready-to-run local development stack with:
 - Reset everything (DANGER: deletes data):
     - `docker compose down -v && docker compose up`
 
-## TODO
-- [x] Create a function to create a tenant
-- [x] Create a function to create an account for a tenant
-- [ ] Create a function to create a ledger
-- [ ] Create a function to create a ledger entry
-- [ ] Create a function to query ledger entries
-
 ## License
 - This sample is provided as-is. Use freely for learning or as a starting point for your projects.
