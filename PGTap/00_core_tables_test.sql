@@ -1,6 +1,6 @@
 BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgtap;
-SELECT plan(40);
+SELECT plan(46);
 
 -- Check extensions
 SELECT has_extension('pgtap');
@@ -45,11 +45,17 @@ SELECT has_trigger('accounts', 'trg_upd_accounts');
 SELECT has_trigger('journal_entries', 'trg_upd_journal_entries');
 SELECT has_trigger('account_balances', 'trg_upd_account_balances');
 
--- Check RLS on accounts
+-- Check RLS on tables
 SELECT ok(rowsecurity, 'Table accounts should have RLS enabled') FROM pg_tables WHERE schemaname = 'public' AND tablename = 'accounts';
+SELECT ok(rowsecurity, 'Table journal_entries should have RLS enabled') FROM pg_tables WHERE schemaname = 'public' AND tablename = 'journal_entries';
+SELECT ok(rowsecurity, 'Table journal_entry_lines should have RLS enabled') FROM pg_tables WHERE schemaname = 'public' AND tablename = 'journal_entry_lines';
+SELECT ok(rowsecurity, 'Table account_balances should have RLS enabled') FROM pg_tables WHERE schemaname = 'public' AND tablename = 'account_balances';
 
 -- Check policies
 SELECT policy_cmd_is('accounts', 'tenant_isolation_policy', 'ALL');
+SELECT policy_cmd_is('journal_entries', 'tenant_isolation_policy', 'ALL');
+SELECT policy_cmd_is('journal_entry_lines', 'tenant_isolation_policy', 'ALL');
+SELECT policy_cmd_is('account_balances', 'tenant_isolation_policy', 'ALL');
 
 -- Check functions
 SELECT has_function('update_timestamp_column');

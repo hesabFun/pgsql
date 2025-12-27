@@ -1,5 +1,5 @@
 BEGIN;
-SELECT plan(7);
+SELECT plan(9);
 
 -- Setup: Create a tenant, account type, currency, and accounts
 INSERT INTO tenants (id, name) VALUES ('00000000-0000-0000-0000-000000000001', 'Test Tenant');
@@ -82,6 +82,66 @@ SELECT throws_ok(
     NULL,
     'Should fail for unbalanced entries'
 );
+
+-- RLS Tests
+-- Setup: Second tenant and account
+INSERT INTO tenants (id, name) VALUES ('00000000-0000-0000-0000-000000000002', 'Second Tenant');
+INSERT INTO accounts (id, tenant_id, account_number, name, account_type_id, currency_code)
+VALUES ('00000000-0000-0000-0000-000000000201', '00000000-0000-0000-0000-000000000002', '1001', 'Cash T2', 1, 'USD');
+INSERT INTO account_balances (account_id) VALUES ('00000000-0000-0000-0000-000000000201');
+
+-- Create a non-superuser role to test RLS if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'test_rls_user') THEN
+        CREATE ROLE test_rls_user LOGIN;
+    END IF;
+END
+$$;
+
+GRANT ALL ON ALL TABLES IN SCHEMA public TO test_rls_user;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO test_rls_user;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO test_rls_user;
+
+-- Switch to test_rls_user
+SET ROLE test_rls_user;
+SELECT set_config('app.current_tenant_id', '00000000-0000-0000-0000-000000000001', true);
+
+-- Test 8: RLS - Should fail when using account from another tenant
+SELECT throws_ok(
+    $$ SELECT create_journal_entry(
+        '00000000-0000-0000-0000-000000000001',
+        'RLS-FAIL-1',
+        'Invisible account',
+        CURRENT_TIMESTAMP,
+        '[
+            {"account_id": "00000000-0000-0000-0000-000000000101", "debit": 100.00, "credit": 0.00},
+            {"account_id": "00000000-0000-0000-0000-000000000201", "debit": 0.00, "credit": 100.00}
+        ]'::jsonb
+    ) $$,
+    'One or more accounts are invalid, do not belong to the specified tenant, or are not accessible',
+    'Should fail when using an account from another tenant'
+);
+
+-- Test 9: RLS - Should fail when trying to create entry for another tenant
+-- (This fails because journal_entries RLS prevents inserting for another tenant)
+SELECT throws_ok(
+    $$ SELECT create_journal_entry(
+        '00000000-0000-0000-0000-000000000002',
+        'RLS-FAIL-2',
+        'Wrong tenant',
+        CURRENT_TIMESTAMP,
+        '[
+            {"account_id": "00000000-0000-0000-0000-000000000201", "debit": 100.00, "credit": 0.00},
+            {"account_id": "00000000-0000-0000-0000-000000000201", "debit": 0.00, "credit": 100.00}
+        ]'::jsonb
+    ) $$,
+    NULL,
+    'Should fail when creating entry for another tenant'
+);
+
+-- Cleanup
+SET ROLE postgres;
 
 SELECT * FROM finish();
 ROLLBACK;

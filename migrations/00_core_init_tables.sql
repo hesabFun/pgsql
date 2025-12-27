@@ -155,13 +155,36 @@ COMMENT ON TABLE account_balances IS 'Denormalized account balances for performa
 COMMENT ON TABLE exchange_rates IS 'Currency exchange rates with validity periods';
 COMMENT ON TABLE currency_conversion_log IS 'Log of all currency conversions';
 
--- Enabling RLS on the chart of accounts
+-- Enabling RLS
 ALTER TABLE accounts ENABLE ROW LEVEL SECURITY;
--- Create access policy (Tenant only sees its own data)
+ALTER TABLE journal_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE journal_entry_lines ENABLE ROW LEVEL SECURITY;
+ALTER TABLE account_balances ENABLE ROW LEVEL SECURITY;
+
+-- Create access policies (Tenant only sees its own data)
 CREATE POLICY tenant_isolation_policy ON accounts
     USING (tenant_id = current_setting('app.current_tenant_id')::UUID);
 
--- Set default tenant_id on new accounts
+CREATE POLICY tenant_isolation_policy ON journal_entries
+    USING (tenant_id = current_setting('app.current_tenant_id')::UUID);
+
+CREATE POLICY tenant_isolation_policy ON journal_entry_lines
+    USING (EXISTS (
+        SELECT 1 FROM journal_entries je
+        WHERE je.id = journal_entry_id
+    ));
+
+CREATE POLICY tenant_isolation_policy ON account_balances
+    USING (EXISTS (
+        SELECT 1 FROM accounts a
+        WHERE a.id = account_id
+    ));
+
+-- Set default tenant_id on new accounts and journal entries
 ALTER TABLE accounts
+    ALTER COLUMN tenant_id
+        SET DEFAULT current_setting('app.current_tenant_id')::uuid;
+
+ALTER TABLE journal_entries
     ALTER COLUMN tenant_id
         SET DEFAULT current_setting('app.current_tenant_id')::uuid;

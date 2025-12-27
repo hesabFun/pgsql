@@ -33,12 +33,15 @@ BEGIN
         RAISE EXCEPTION 'Journal entry must have a positive balanced amount';
     END IF;
 
-    -- 2. Validate tenant consistency for all accounts
-    IF EXISTS (SELECT 1
-               FROM jsonb_array_elements(p_lines) AS l
-                        JOIN accounts a ON (l ->> 'account_id')::UUID = a.id
-               WHERE a.tenant_id != p_tenant_id) THEN
-        RAISE EXCEPTION 'One or more accounts do not belong to the specified tenant';
+    -- 2. Validate tenant consistency and existence for all accounts
+    -- This ensures all accounts exist, belong to the tenant, and are accessible (respecting RLS)
+    IF (SELECT count(DISTINCT (l ->> 'account_id')::UUID)
+        FROM jsonb_array_elements(p_lines) AS l) !=
+       (SELECT count(*)
+        FROM accounts
+        WHERE id IN (SELECT (l ->> 'account_id')::UUID FROM jsonb_array_elements(p_lines) AS l)
+          AND tenant_id = p_tenant_id) THEN
+        RAISE EXCEPTION 'One or more accounts are invalid, do not belong to the specified tenant, or are not accessible';
     END IF;
 
     -- 3. Insert Journal Entry Header
