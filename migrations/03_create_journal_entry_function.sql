@@ -59,8 +59,7 @@ BEGIN
             -- Update account balance
             UPDATE account_balances
             SET debit_balance  = debit_balance + COALESCE((v_line.element ->> 'debit')::NUMERIC, 0),
-                credit_balance = credit_balance + COALESCE((v_line.element ->> 'credit')::NUMERIC, 0),
-                updated_at     = CURRENT_TIMESTAMP
+                credit_balance = credit_balance + COALESCE((v_line.element ->> 'credit')::NUMERIC, 0)
             WHERE account_id = (v_line.element ->> 'account_id')::UUID;
         END LOOP;
 
