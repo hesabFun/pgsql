@@ -24,7 +24,7 @@ services:
         condition: service_healthy
     working_dir: /workspace
     volumes:
-      - ./migrations:/workspace/migrations
+      - ./schema:/workspace/migrations
       - ./atlas.hcl:/workspace/atlas.hcl:ro
     environment:
       ATLAS_LOG_FORMAT: ${ATLAS_LOG_FORMAT:-cli}
@@ -57,7 +57,7 @@ services:
         condition: service_healthy
     working_dir: /workspace
     volumes:
-      - ./migrations:/workspace/migrations
+      - ./schema:/workspace/migrations
       - ./atlas.hcl:/workspace/atlas.hcl
     environment:
       ATLAS_LOG_FORMAT: ${ATLAS_LOG_FORMAT:-cli}

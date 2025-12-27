@@ -9,9 +9,9 @@ This project provides a ready-to-run local development stack with:
 - Docker Compose to orchestrate all services and run migrations automatically on startup
 
 ## Repository structure
-- docker-compose.yml — Orchestrates Postgres, Atlas (migrations), and pgAdmin
-- atlas.hcl — Atlas configuration (connection URL and migration directory)
-- migrations/ — Database migration files (Golang-Migrate format)
+- docker-compose.yml — Orchestrates Postgres, Atlas (schema), and pgAdmin
+- atlas.hcl — Atlas configuration (connection URL and schema directory)
+- schema/ — Database migration files (Golang-Migrate format)
     - 00_core_init_tables.sql — Initial migration that creates the core ledger tables
     - 01_create_tenant_function.sql — Function to create a new tenant
 - PGTap/ — Database test files (pgTAP)
@@ -51,12 +51,12 @@ This project provides a ready-to-run local development stack with:
 
 ## Managing migrations with Atlas
 - Migration format: golang-migrate style (file names like 20250101120000_add_table.up.sql)
-- Files live in: migrations/
+- Files live in: schema/
 
 ## Create a new migration file
-- You can author SQL directly inside migrations/*.up.sql and optional *.down.sql.
+- You can author SQL directly inside schema/*.up.sql and optional *.down.sql.
 - Example file names:
-    - migrations/00_core_init_tables.sql
+    - schema/00_core_init_tables.sql
 
 ## Apply migrations (re-run manually)
 - The migrate service runs automatically on docker compose up. If you add new migration files or see checksum errors, run:
@@ -117,7 +117,7 @@ This project provides a ready-to-run local development stack with:
     - Check logs of the migrate service: docker compose logs migrate
     - Run manually: `docker compose run --rm migrate`
 - Checksum error about atlas.sum:
-    - If you see "You have a checksum error in your migration directory" or "checksum file not found", just run the migrate service to generate checksums and apply: `docker compose run --rm migrate`
+    - If you see "You have a checksum error in your schema directory" or "checksum file not found", just run the migrate service to generate checksums and apply: `docker compose run --rm migrate`
 - Reset everything (DANGER: deletes data):
     - `docker compose down -v && docker compose up`
 

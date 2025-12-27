@@ -1,5 +1,0 @@
-h1:e8KSL4hAtS8OTZsLwydzYMTbbbJVpXp1biX7aF15y3M=
-00_core_init_tables.sql h1:oVuDxyU9su0Sgv6460HUKD6Oi1Xkg4lzwwmhr+MCLFE=
-01_create_tenant_function.sql h1:WKlFx9B2dls2Hgmco8qSrDy1BWLADioJesxIGvzk67s=
-02_create_account_function.sql h1:l4YNpCLWIzt++r+rMANvakELX7lKaemrB3Vzk5eRApE=
-03_create_journal_entry_function.sql h1:zowPJDw0tg4ZxaJKztCrlj1SSA/Ab2UcMNgBzJ6v4AE=
