@@ -28,7 +28,8 @@ services:
       - ./atlas.hcl:/workspace/atlas.hcl:ro
     environment:
       ATLAS_LOG_FORMAT: ${ATLAS_LOG_FORMAT:-cli}
-    command: ["migrate", "apply", "--env", "docker"]
+      URL: "postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@db:${PGPORT:-5432}/${PGDATABASE:-ledger}?search_path=public&sslmode=disable"
+    command: ["migrate", "apply", "--url", "${URL}", "--dir-name", "migrations"]
     restart: "no"
 
   pgadmin:
