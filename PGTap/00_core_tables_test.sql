@@ -1,12 +1,10 @@
 BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgtap;
-SELECT plan(46);
+SELECT plan(45);
 
 -- Check extensions
 SELECT has_extension('pgtap');
 SELECT has_extension('pgcrypto');
-SELECT has_extension('pg_trgm');
-
 
 -- Check tables
 SELECT has_table('tenants');

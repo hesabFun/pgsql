@@ -3,7 +3,6 @@
 
 -- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
 -- Tenants table
 CREATE TABLE IF NOT EXISTS tenants
