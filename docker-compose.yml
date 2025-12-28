@@ -7,11 +7,11 @@ services:
     volumes:
       - db_data:/var/lib/postgresql
     environment:
-      POSTGRES_USER: ${PGUSER:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${PGPASSWORD:-postgres}
       POSTGRES_DB: ${PGDATABASE:-ledger}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
       interval: 5s
       timeout: 5s
       retries: 15
@@ -25,7 +25,7 @@ services:
     working_dir: /workspace
     volumes:
       - ./schema:/workspace/migrations:ro
-    command: ["migrate", "apply", "--url", "postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@${PGHOST:-db}:${PGPORT:-5432}/${PGDATABASE:-ledger}?search_path=public&sslmode=disable"]
+    command: ["migrate", "apply", "--url", "postgres://${POSTGRES_USER:-postgres}:${PGPASSWORD:-postgres}@${PGHOST:-db}:${PGPORT:-5432}/${PGDATABASE:-ledger}?search_path=public&sslmode=disable"]
     restart: "no"
 
   pgadmin:
@@ -67,7 +67,7 @@ services:
       - manual
     environment:
       PGHOST: ${PGHOST:-db}
-      PGUSER: ${PGUSER:-postgres}
+      PGUSER: ${POSTGRES_USER:-postgres}
       PGPASSWORD: ${PGPASSWORD:-postgres}
       PGDATABASE: ${PGDATABASE:-ledger}
     depends_on:
