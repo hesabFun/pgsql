@@ -5,9 +5,6 @@ SELECT plan(6);
 INSERT INTO tenants (name) VALUES ('Test Tenant');
 SELECT set_config('app.current_tenant_id', (SELECT id FROM tenants WHERE name = 'Test Tenant' LIMIT 1)::text, true);
 
-INSERT INTO account_types (code, name, normal_balance) VALUES ('ASSET', 'Asset', 'DEBIT');
-INSERT INTO currencies (code, name, symbol) VALUES ('USD', 'US Dollar', '$');
-
 -- Check if function exists
 SELECT has_function('create_account', ARRAY['character varying', 'character varying', 'integer', 'character varying', 'text', 'uuid']);
 

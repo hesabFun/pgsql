@@ -4,16 +4,13 @@ SELECT plan(9);
 -- Setup: Create a tenant, account type, currency, and accounts
 INSERT INTO tenants (id, name) VALUES ('00000000-0000-0000-0000-000000000001', 'Test Tenant');
 SELECT set_config('app.current_tenant_id', '00000000-0000-0000-0000-000000000001', true);
-INSERT INTO account_types (id, code, name, normal_balance) VALUES (1, 'ASSET', 'Asset', 'DEBIT');
-INSERT INTO account_types (id, code, name, normal_balance) VALUES (2, 'REVENUE', 'Revenue', 'CREDIT');
-INSERT INTO currencies (code, name, symbol) VALUES ('USD', 'US Dollar', '$');
 
 -- Use the create_account function (assuming it works as intended despite the inconsistency found earlier)
 -- We'll manually insert for now to be sure of the state
 INSERT INTO accounts (id, tenant_id, account_number, name, account_type_id, currency_code)
 VALUES ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000001', '1001', 'Cash', 1, 'USD');
 INSERT INTO accounts (id, tenant_id, account_number, name, account_type_id, currency_code)
-VALUES ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000001', '4001', 'Sales', 2, 'USD');
+VALUES ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000001', '4001', 'Sales', 4, 'USD');
 
 INSERT INTO account_balances (account_id) VALUES ('00000000-0000-0000-0000-000000000101');
 INSERT INTO account_balances (account_id) VALUES ('00000000-0000-0000-0000-000000000102');

@@ -1,5 +1,6 @@
-h1:P4y8lg3tJYnvkfpQreHWmyHOfHIEKXrnuFemG3+0YG4=
-00_core_init_tables.sql h1:lliA3OKNa/xXb8MwWRyWDT/X9FIOjQ3BXOXlZmhHhDM=
-01_create_tenant_function.sql h1:/71UJyNrN98sNylCbbbXeUhqjbkrCv0RBqUro5yYQGw=
-02_create_account_function.sql h1:p3BvFwI59jWlUU2ftxQZbc7rO7M5t88acBLcjdWOc1s=
-03_create_journal_entry_function.sql h1:2af6hgQOWwf5AUuKtU3/XyEZ5Fb7x4Iv24z7xEEq2X8=
+h1:kZMlhIg5t1h1JeYlx2FCKLmESMawAtIJVLuhycrMRgk=
+00_core_init_tables.sql h1:J/loIjyKndxQ185F+FYjsXsyF4zyyBe/iu0YiHNgJcM=
+01_create_tenant_function.sql h1:BZUB1mmtRujf4hegPJHbWP3b1IFQoUbGQQwcvJqCdzw=
+02_create_account_function.sql h1:OuOIkp5Eqm18O5CwSn/PoGKhINHrL9hTqHkCoppbCCg=
+03_create_journal_entry_function.sql h1:dRFA4MxxV1FC8ws2SKGGbg1l5xAv3O9+rEfQd18dXEk=
+04_insert_defualt_values.sql h1:7//4BN3jXkDi+VBbF22Ua8BcO2gOGwwh0gXQ6EDJPJU=

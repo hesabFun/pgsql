@@ -117,6 +117,8 @@ COMMENT ON TABLE accounts IS 'Chart of accounts for each tenant, each account su
 COMMENT ON TABLE journal_entries IS 'Double-entry journal transactions';
 COMMENT ON TABLE journal_entry_lines IS 'Individual debit/credit entries within a journal transaction';
 COMMENT ON TABLE account_balances IS 'Denormalized account balances for performance';
+COMMENT ON TABLE account_types IS 'Standard account types for double-entry bookkeeping';
+COMMENT ON TABLE currencies IS 'Supported currencies with their symbols and precision';
 
 -- Enabling RLS
 ALTER TABLE accounts ENABLE ROW LEVEL SECURITY;
