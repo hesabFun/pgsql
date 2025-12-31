@@ -53,7 +53,7 @@ SELECT policy_cmd_is('journal_entry_lines', 'tenant_isolation_policy', 'ALL');
 SELECT policy_cmd_is('account_balances', 'tenant_isolation_policy', 'ALL');
 
 -- Check functions
-SELECT has_function('update_timestamp_column');
+SELECT has_function('update_updated_at_column');
 
 -- Verify some specific constraints
 SELECT col_not_null('tenants', 'name');

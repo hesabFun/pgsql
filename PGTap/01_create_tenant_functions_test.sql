@@ -2,7 +2,7 @@ BEGIN;
 SELECT plan(4);
 
 -- Check if function exists
-SELECT has_function('create_tenant', ARRAY['character varying']);
+SELECT has_function('create_tenant', ARRAY['character varying', 'uuid']);
 
 -- Test creating a tenant
 SELECT is(

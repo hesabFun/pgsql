@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS account_balances
 );
 
 -- Create function to update timestamp columns
-CREATE OR REPLACE FUNCTION update_timestamp_column()
+CREATE OR REPLACE FUNCTION update_updated_at_column()
     RETURNS TRIGGER AS
 $$
 BEGIN
@@ -104,12 +104,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create triggers
-CREATE TRIGGER trg_upd_tenants BEFORE UPDATE ON tenants FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
-CREATE TRIGGER trg_upd_account_types BEFORE UPDATE ON account_types FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
-CREATE TRIGGER trg_upd_currencies BEFORE UPDATE ON currencies FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
-CREATE TRIGGER trg_upd_accounts BEFORE UPDATE ON accounts FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
-CREATE TRIGGER trg_upd_journal_entries BEFORE UPDATE ON journal_entries FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
-CREATE TRIGGER trg_upd_account_balances BEFORE UPDATE ON account_balances FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
+CREATE TRIGGER trg_upd_tenants BEFORE UPDATE ON tenants FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_upd_account_types BEFORE UPDATE ON account_types FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_upd_currencies BEFORE UPDATE ON currencies FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_upd_accounts BEFORE UPDATE ON accounts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_upd_journal_entries BEFORE UPDATE ON journal_entries FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER trg_upd_account_balances BEFORE UPDATE ON account_balances FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Add comments to tables
 COMMENT ON TABLE tenants IS 'Multi-tenant organization data';
