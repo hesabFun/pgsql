@@ -1,5 +1,7 @@
 # Multi Tenant Double Entry Accounting DB schema
 
+[![PostgreSQL Tests](https://github.com/hesabFun/ledger-schema/actions/workflows/test.yml/badge.svg)](https://github.com/hesabFun/ledger-schema/actions/workflows/test.yml)
+
 ## Overview
 This project provides a ready-to-run local development stack with:
 - PostgreSQL 18 as the database
